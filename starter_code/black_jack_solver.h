@@ -1,5 +1,5 @@
-#ifndef BLACK_JACK_SOLVER
-#define BLACK_JACK_SOLVER
+#ifndef BLACK_JACK_SOLVER_H
+#define BLACK_JACK_SOLVER_H
 #include<vector>
 #include<iostream>
 using namespace std;
