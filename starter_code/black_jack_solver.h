@@ -1,8 +1,8 @@
 #ifndef BLACK_JACK_SOLVER
 #define BLACK_JACK_SOLVER
-#include <vector>
-#include <iostream>
-
+#include<vector>
+#include<iostream>
+using namespace std;
 class BlackJackSolver{
     public:
         // some temporary variables
@@ -10,7 +10,7 @@ class BlackJackSolver{
 
     public:
         BlackJackSolver(float );
-        void printOutput(vector<vector<int>>& answer_diff,vector<vector<int>>& answer_ace,vector<vector<int>>& answer_pair);
+        void printOutput(vector<vector<int>> &answer_diff,vector<vector<int>> &answer_ace,vector<vector<int>> &answer_pair);
         void run();
         
         // methods to implement
