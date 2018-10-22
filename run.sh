@@ -1,1 +1,1 @@
-Hello
+./starter_code/main $1>Policy.txt
