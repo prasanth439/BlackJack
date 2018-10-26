@@ -4,44 +4,131 @@
 BlackJackSolver::BlackJackSolver(float face_card_prob)
 {
     this->face_card_prob = face_card_prob;
-    run();
+    this->normal_card_prob = (1.0f - face_card_prob)/9.0f;
+    computeReward_Stand();
+    computeReward_DoubleDown();
 };
-float BlackJackSolver::evaluateWrapper(short_int number){
-    float sum = 0;
-    short_int i = 0;
-    for(i = 1;i<11;i++){
-        sum = sum + evaluator(number + i);
-    }
-    sum = sum / 10.0f;
-    return sum;
-}
-float BlackJackSolver::evaluator(short_int number){
+void BlackJackSolver::computeReward_Stand(){
     
-    float sum = 0;
-    if(number>17){
-          
-        return number;
+    int i,j;
+    for(i=4;i<=21;i++){
+        for(j=2;j<11;j++){
+            State s(j,0);
+            reward_stand[i][j] = valueStand(i,s);
+        }
+        j = 11;
+        State s(j,1);
+        reward_stand[i][j] = valueStand(i,s);
     }
+};
+void BlackJackSolver::computeReward_DoubleDown(){
+    int i,j;
+    for(i=4;i<=21;i++){
+        for(j=2;j<11;j++){
+            State s(j,0);
+            reward_doubledown[i][j] = valueDoubleDown(i,s);
+        }
+        j = 11;
+        State s(j,1);
+        reward_stand[i][j] = valueDoubleDown(i,s);
+    }
+};
+float BlackJackSolver::valueStand(int player_value,State s_value)
+{
+    
+    if(s_value.sum>17)
+    {
+        if(s_value.sum>21){
+            return 1;
+        }
+        if(player_value>s_value.sum){
+            return 1;
+        }
+        else if(player_value==s_value.sum){
+            return 0;
+        }
+        else{
+            return -1;
+        }
+    }
+    else
+    {
+        int i;
+        float answer=0.0f;
+        for(i = 2;i<10;i++){
+            s_value.sum +=i;
+
+            answer +=  normal_card_prob * valueStand(player_value,s_value);
+
+            s_value.sum -=i;
+        }
+        // for i = 11
+        i = 10;
+        s_value.sum+=i;
+        answer +=face_card_prob * valueStand(player_value,s_value);
+        s_value.sum -=i;
+
+        i = 11;
+        if(s_value.count_ace!=0){
+            i = 1;
+        }
+        s_value.sum +=i;
+        if(i==11){
+            s_value.count_ace++;
+        }
+
+        answer +=  normal_card_prob * valueStand(player_value,s_value);
+        s_value.sum -=i;
+
+        return answer;
+
+    }
+}
+float BlackJackSolver::valueDoubleDown(int player_value,State s_value){
 
     int i;
-    for(i = 1;i<10;i++){
-        sum = sum + evaluator(number + i);
+    float answer = 0.0f;
+    for(i=2;i<10;i++){
+        player_value +=i;
+        if(player_value>21){
+            answer += -2*normal_card_prob;
+        }
+        else{
+            answer += normal_card_prob * 2 * reward_stand[player_value][s_value.sum];
+        }
+
+        player_value -=i;
     }
-    sum = sum * (1.0f-face_card_prob)/9.0f;
-    i = 10;
-    sum += face_card_prob*evaluator(number + i);
-    return sum;
+    i=10;
+        player_value +=i;
+        if(player_value>21){
+            answer += -2*face_card_prob;
+        }
+        else{
+            answer += face_card_prob *2* reward_stand[player_value][s_value.sum];
+        }
+
+        player_value -=i;
+    i=11;
+        player_value +=i;
+        if(player_value>21){
+            player_value -=10;
+            i = 1;
+        }
+        if(player_value>21){
+            answer += -2*face_card_prob;
+        }
+        else{
+
+            answer += normal_card_prob * 2*reward_stand[player_value][s_value.sum];
+        }
+
+        player_value -=i;
+        return answer;
 
 };
-void BlackJackSolver::run(){
-    
-    vector<vector<int>> answer_diff,answer_ace,answer_pair;
-    // solve the optimal play for the dealer
 
 
-    
-    // printOutput(answer_diff,answer_ace,answer_pair);
-};
 
 void BlackJackSolver::printOutput(vector<vector<int>>& answer_diff,vector<vector<int>>& answer_ace,vector<vector<int>>& answer_pair)
 {

@@ -8,13 +8,19 @@ class BlackJackSolver{
     public:
         // some temporary variables
         float face_card_prob;
+        float normal_card_prob;
+        float reward_stand[22][10] = {{0.0}};
+        float reward_doubledown[22][10] = {{0.0}};
 
     public:
         BlackJackSolver(float );
         void printOutput(vector<vector<int>> &answer_diff,vector<vector<int>> &answer_ace,vector<vector<int>> &answer_pair);
         void run();
-        float evaluator(short_int number);
-        float evaluateWrapper(short_int number);
+        void computeReward_Stand();
+        float valueStand(int player_value,State s_value);
+        float BlackJackSolver::valueDoubleDown(int player_value,State s_value);
+
+        void computeReward_DoubleDown();
         
         // methods to implement
 };
