@@ -26,9 +26,10 @@ class BlackJackSolver{
         float valueDoubleDown(int player_value,State s_value);
         float valueDoubleDown_ace(int player_value,State s_value);
         void printRewardValues();
-        inline void hit();
-        inline void stand();
-        inline void doubleDown();
+        inline void hit(vector<vector<char>>& t,int i,int j);
+        inline void stand(vector<vector<char>>& t,int i,int j);
+        inline void doubleDown(vector<vector<char>>& t,int i,int j);
+        inline void pairVal(vector<vector<char>>& t,int i,int j);
 
         void computeReward_DoubleDown();
         
