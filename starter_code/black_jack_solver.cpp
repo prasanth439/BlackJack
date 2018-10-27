@@ -275,14 +275,14 @@ void BlackJackSolver::computeValue(){
         for(i=21;i>=5;i--){
             val_no_double[i] = reward_stand[i][dealer_card];
             j = i+2;
-            while(j<=21 && (j-i)<10) {
-                vs+=normal_card_prob*val_no_double[j];
+            while((j-i)<10) {
+                (j<=21)? vs+=normal_card_prob*val_no_double[j] : vs+=normal_card_prob*(-1);
                 j++;
             }
             j=i+10;
-            (j<=21)? vs+=face_card_prob*val_no_double[j] : vs+=0;
+            (j<=21)? vs+=face_card_prob*val_no_double[j] : vs+=face_card_prob*(-1);
             j++;
-            (j<=21)? vs+=normal_card_prob*val_no_double[j] : vs+=normal_card_prob*val_aus_no_double[j-10];
+            (j<=21)? vs+=normal_card_prob*val_no_double[j] : ( (j-10 <= 21)? vs+=normal_card_prob*val_aus_no_double[j-10] : vs+= -normal_card_prob );
 
             (vs>val_no_double[i])? val_no_double[j]=vs : val_no_double[i]+=0;
         }
