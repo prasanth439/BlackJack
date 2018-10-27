@@ -138,6 +138,180 @@ void BlackJackSolver::run()
 
 };
 
+void BlackJackSolver::computeValue(){
+    // one value is reward 1.5
+    float val[20] = {0},val_aus[21] = {0},val_pair[21] = {0},val_no_double[22] = {0},val_aus_no_double[22] = {0};
+    float next_val[20] = {0},next_val_aus[21] = {0},next_val_pair[21] = {0},next_val_no_double[22] = {0},next_val_aus_no_double[22] = {0};
+    float min_diff;
+    float EPSIOLON;
+    float temp_qs,temp_qh,temp_qp,temp_qd;
+    // initialize the values of the states
+    int j,i;
+    int count = 0;
+    float max_;
+    float temm;
+    int temm_tt;
+    float temp_qs[22],temp_qh[22];
+    float temp_qs_aus[21],temp_qh_aus[22];
+    int dealer_card = 6;
+    while(count<20){
+        // val
+        for(i=4;i<=19;i++)
+        {
+            // find the qh qs q
+            temp_qs = reward_stand[i][dealer_card];
+            temp_qd = reward_doubledown[i][dealer_card];
+            temm = 0;
+            for(j=2;j<10;j++){
+                temm_tt = i+j;
+                if (temm_tt>21)
+                    temm += normal_card_prob*(-1.0f);
+                else
+                {
+                    temm += normal_card_prob*val_no_double[temm_tt];
+                }
+            }
+            j = 10;
+            {
+                temm_tt = i+j;
+                if (temm_tt>21)
+                    temm += face_card_prob*(-1.0f);
+                else
+                {
+                    temm += face_card_prob*val_no_double[temm_tt];
+                }
+            }
+            j = 
+            11;
+            {
+                temm_tt = i+j;
+                if(temm_tt<=21){
+                    temm+= normal_card_prob*val_aus_no_double[temm_tt];
+                }
+                else{
+                    temm+= normal_card_prob*val_no_double[temm_tt-10];
+                }
+            }
+            temp_qh = temm;
+
+            // find max and update
+            max_ = temp_qs;
+            if(max_<temp_qd){
+                max_ = temp_qd;
+            }
+            if(max_<temp_qh){
+                max_ = temp_qh;
+            }
+
+            next_val[i] = max_;
+        }
+        // val aus
+        for(i=13;i<=20;i++){
+            // find the qh qs q
+            temp_qs = reward_stand[i][dealer_card];
+            temp_qd = reward_doubledown[i][dealer_card];
+            temm = 0;
+            for(j=2;j<10;j++){
+                temm_tt = i+j;
+                if (temm_tt>21){
+                    temm += normal_card_prob*val_no_double[temm_tt-10];
+                }
+                else
+                {
+                    temm += normal_card_prob*val_no_double[temm_tt];
+                }
+            }
+            j = 10;
+            {
+                temm_tt = i+j;
+                if (temm_tt>21)
+                    temm += face_card_prob*val_no_double[temm_tt-10];
+                else
+                {
+                    temm += face_card_prob*val_no_double[temm_tt];
+                }
+            }
+            j = 1;
+            {
+                temm_tt = i+j;
+                if(temm_tt>21){
+                    temm+= normal_card_prob*val_aus_no_double[temm_tt-10];
+                }
+                else{
+                    temm+= normal_card_prob*val_no_double[temm_tt];
+                }
+            }
+            temp_qh = temm;
+
+            // find max and update
+            max_ = temp_qs;
+            if(max_<temp_qd){
+                max_ = temp_qd;
+            }
+            if(max_<temp_qh){
+                max_ = temp_qh;
+            }
+
+            next_val[i] = max_;
+
+        }
+        // val pair
+        for(i=4;i<=20;i=i+2){
+            
+            max_ = next_val[i];
+            if(max_<temp_qd){
+                max_ = temp_qd;
+            }
+            if(max_<temp_qh){
+                max_ = temp_qh;
+            }
+
+            next_val[i] = max_;
+
+        }
+        // val no double
+        int j,d;
+        float vs=0;
+        for(i=21;i>=5;i--){
+            val_no_double[i] = reward_stand[i][dealer_card];
+            j = i+2;
+            while(j<=21 && (j-i)<10) {
+                vs+=normal_card_prob*val_no_double[j];
+                j++;
+            }
+            j=i+10;
+            (j<=21)? vs+=face_card_prob*val_no_double[j] : vs+=0;
+            j++;
+            (j<=21)? vs+=normal_card_prob*val_no_double[j] : vs+=normal_card_prob*val_aus_no_double[j-10];
+
+            (vs>val_no_double[i])? val_no_double[j]=vs : val_no_double[i]+=0;
+        }
+        // val aus no double
+        for(i=13;i<=21;i++){
+
+        }
+
+
+        // ============== transfer step ====== //
+        for(i=0;i<20;i++){
+            val[i]= next_val[i] ;
+            val_aus[i] = next_val_aus[i];
+            val_pair[i] = next_val_pair[i];
+            val_no_double[i] = next_val_no_double[i];
+            val_aus_no_double[i] = next_val_aus_no_double[i];
+        }
+        i = 20;
+            val_aus[i] = next_val_aus[i];
+            val_pair[i] = next_val_pair[i];
+            val_no_double[i] = next_val_no_double[i];
+            val_aus_no_double[i] = next_val_aus_no_double[i];
+        i = 21;
+            val_no_double[i] = next_val_no_double[i];
+            val_aus_no_double[i] = next_val_aus_no_double[i];
+        
+        count++;
+    }
+};
 
 void BlackJackSolver::printRewardValues()
 {

@@ -18,6 +18,7 @@ class BlackJackSolver{
         void printOutput(vector<vector<int>> &answer_diff,vector<vector<int>> &answer_ace,vector<vector<int>> &answer_pair);
         void run();
         void computeReward_Stand();
+        void computeValue();
         float valueStand(int player_value,State s_value);
         float valueDoubleDown(int player_value,State s_value);
         void printRewardValues();
