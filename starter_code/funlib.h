@@ -13,8 +13,6 @@ class State{
             this->sum = sum;
             this->count_ace = count_ace;
         };
-        // happy
-
 };
 
 #endif

@@ -13,7 +13,7 @@ class BlackJackSolver{
         float reward_stand[22][12] = {{0.0}};
         float reward_doubledown[22][12] = {{0.0}};
         float reward_doubledown_Ace[22][12] = {{0.0}};
-
+        bool bottle_neck = false;
     public:
         BlackJackSolver(float );
         void printOutput(vector<vector<char>> &answer_diff,vector<vector<char>> &answer_ace,vector<vector<char>> &answer_pair);
