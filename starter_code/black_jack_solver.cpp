@@ -1,5 +1,4 @@
 #include "black_jack_solver.h"
-
 #include"hide.h"
 void BlackJackSolver::computeValue(){
     // one value is reward 1.5
@@ -17,6 +16,7 @@ void BlackJackSolver::computeValue(){
     int dealer_card ;
     for(dealer_card = 2;dealer_card<=11;dealer_card++){
         count = 0;
+        // value iteration 
         while(count<1500){
             // temp_qh  --> 4 to 20
             for(i=4;i<=21;i++)
@@ -89,7 +89,8 @@ void BlackJackSolver::computeValue(){
                 
             }
             // temp_qp
-            for(i=4;i<=22;i++){
+            for(i=4;i<=22;i=i+2)
+            {
                 temm = 0;
                 for(j=2;j<10;j++){
                     if(i/2==j){
@@ -111,10 +112,7 @@ void BlackJackSolver::computeValue(){
                     }
                 j=11;
                     temm_tt = i/2 + j;
-                    if(temm_tt>21&&i!=22){
-                        temm += normal_card_prob * val[temm_tt-10];
-                    }
-                    else if(temm_tt>21&&i==22){
+                    if(temm_tt==22){
                         temm += normal_card_prob * val_aus[temm_tt-10];
                     }
                     else{
@@ -218,7 +216,8 @@ void BlackJackSolver::computeValue(){
                 val_pair[22] = next_val_pair[22];
             count++;
         }
-        // action finding
+        // first action finding
+        // different cards
         for(i=5;i<=19;i++){
             if(val[i]==temp_qh[i])
                 hit(answer_diff,i-5,dealer_card-2);
@@ -231,6 +230,7 @@ void BlackJackSolver::computeValue(){
                 cerr<<val[i]<<"  "<<temp_qh[i]<<"  "<<reward_stand[i][dealer_card]<<"  "<<reward_doubledown[i][dealer_card]<<endl;
             }
         }
+        // ace cards
         for(i=13;i<=20;i++){
             if(val_aus[i]==temp_qh_aus[i])
                 hit(answer_ace,i-13,dealer_card-2);
@@ -244,6 +244,7 @@ void BlackJackSolver::computeValue(){
                 cerr<<val_aus[i]<<"  "<<temp_qh[i]<<"  "<<reward_stand[i][dealer_card]<<"  "<<reward_doubledown[i][dealer_card]<<endl;
             }
         }
+        // pairs
         for(i=4;i<=22;i=i+2)
         {
             if(val_pair[i]==temp_qh[i])
