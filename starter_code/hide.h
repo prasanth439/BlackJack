@@ -32,6 +32,10 @@ void BlackJackSolver::computeReward_DoubleDown()
             reward_doubledown[i][j] = valueDoubleDown(i,s);
         }
     }
+    i=21;
+    for(j=2;j<12;j++){
+        reward_doubledown[i][j] = -2;
+    }
 };
 
 void BlackJackSolver::computeReward_DoubleDown_Ace()
@@ -44,12 +48,17 @@ void BlackJackSolver::computeReward_DoubleDown_Ace()
             reward_doubledown_Ace[i][j] = valueDoubleDown_ace(i,s);
         }
     }
+    i=21;
+    for(j=2;j<12;j++){
+        reward_doubledown_Ace[i][j] = -2;
+    }
 };
 // hand 11 --> 10
 float BlackJackSolver::valueDoubleDown(int hand_value,State dealer_hand)
 {
     int i;
     float answer = 0.0f;
+    //if(hand_value==21) return -2;
     for(i=2;i<10;i++){
         hand_value +=i;
         if(hand_value>21){
@@ -245,7 +254,7 @@ void BlackJackSolver::printRewardValues()
     for(int i=4;i<22;i++){
         cout<<"\n"<<i<<"\t";
         for(int j=2;j<12;j++){
-            cout<<setprecision(3)<<fixed<<this->reward_doubledown[i][j]<<"\t";
+            cout<<setprecision(3)<<fixed<<this->reward_doubledown_Ace[i][j]<<"\t";
         }
     }
     cout<<endl;
