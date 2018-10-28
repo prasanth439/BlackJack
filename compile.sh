@@ -1,3 +1,3 @@
-cd starter_code
+cd starter_code/
 make clean
 make
