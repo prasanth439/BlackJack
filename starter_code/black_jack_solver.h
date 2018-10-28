@@ -23,7 +23,7 @@ class BlackJackSolver{
         void computeValue();
         void computeReward_DoubleDown_Ace();
         
-        float valueStand(int player_value,State s_value);
+        float valueStand(int player_value,State s_value,int caller);
         float valueDoubleDown(int player_value,State s_value);
         float valueDoubleDown_ace(int player_value,State s_value);
         void printRewardValues();

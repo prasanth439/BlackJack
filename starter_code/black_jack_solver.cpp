@@ -19,6 +19,7 @@ void BlackJackSolver::computeValue(){
         // value iteration 
         while(count<1500){
             // temp_qh  --> 4 to 20
+            val[21]=val_aus[21]=val_aus_no_double[21]=val_no_double[21] = reward_stand[21][dealer_card];
             for(i=4;i<=21;i++)
             {
                 temm = 0;
@@ -32,7 +33,7 @@ void BlackJackSolver::computeValue(){
                     }
                 }
                 j = 10;
-                {
+                
                     temm_tt = i+j;
                     if (temm_tt>21)
                         temm += face_card_prob*(-1.0f);
@@ -40,9 +41,9 @@ void BlackJackSolver::computeValue(){
                     {
                         temm += face_card_prob*val_no_double[temm_tt];
                     }
-                }
+                
                 j = 11;
-                {
+                
                     temm_tt = i+j;
                     if(temm_tt<=21){
                         temm+= normal_card_prob*val_aus_no_double[temm_tt];
@@ -50,14 +51,14 @@ void BlackJackSolver::computeValue(){
                     else{
                         // temm+= normal_card_prob*val_no_double[temm_tt-10];
                         temm_tt-=10;
-                        if(temm_tt>21){
-                            temm+= normal_card_prob*val_aus_no_double[temm_tt];
+                        if(temm_tt<=21){
+                            temm+= normal_card_prob*val_no_double[temm_tt];
                         }
                         else{
                             temm+= normal_card_prob*(-1.0f);
                         }
                     }
-                }
+                
                 temp_qh[i] = temm;
             }
             // temp_qh_aus
@@ -76,7 +77,7 @@ void BlackJackSolver::computeValue(){
                     }
                 }
                 j = 10;
-                {
+                
                     temm_tt = i+j;
                     if (temm_tt>21)
                         temm += face_card_prob*val_no_double[temm_tt-10];
@@ -84,7 +85,7 @@ void BlackJackSolver::computeValue(){
                     {
                         temm += face_card_prob*val_aus_no_double[temm_tt];
                     }
-                }
+                
                 temp_qh_aus[i] = temm;
                 
             }
@@ -151,11 +152,11 @@ void BlackJackSolver::computeValue(){
                 if(i==22){
                     i-=10;
                     max_ = reward_stand[i][dealer_card];
-                    if(max_<reward_doubledown[i][dealer_card]){
-                        max_ = reward_doubledown[i][dealer_card];
+                    if(max_<reward_doubledown_Ace[i][dealer_card]){
+                        max_ = reward_doubledown_Ace[i][dealer_card];
                     }
-                    if(max_<temp_qh[i]){
-                        max_ = temp_qh[i];
+                    if(max_<temp_qh_aus[i]){
+                        max_ = temp_qh_aus[i];
                     }
                     if(max_<temp_qp[i]){
                         max_ = temp_qp[i];
@@ -225,7 +226,7 @@ void BlackJackSolver::computeValue(){
                 stand(answer_diff,i-5,dealer_card-2);
             else if(val[i]==reward_doubledown[i][dealer_card])
                 doubleDown(answer_diff,i-5,dealer_card-2);
-            if(i==9&&dealer_card==2){
+            if(i==11&&dealer_card==10){
                 cerr<<"Value["<<i<<"]["<<dealer_card<<"] Value | Qhit | Qstand | Qdoubledown"<<endl;
                 cerr<<val[i]<<"  "<<temp_qh[i]<<"  "<<reward_stand[i][dealer_card]<<"  "<<reward_doubledown[i][dealer_card]<<endl;
             }
@@ -261,6 +262,7 @@ void BlackJackSolver::computeValue(){
                 cerr<<val_pair[i]<<"  "<<temp_qh[i]<<"  "<<reward_stand[i][dealer_card]<<"  "<<reward_doubledown[i][dealer_card]<<"  "<<temp_qp[i]<<endl;
             }   
         }
+
 
 
     }
