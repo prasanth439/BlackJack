@@ -42,7 +42,7 @@ void BlackJackSolver::computeReward_DoubleDown_Ace()
 {
     // correct
     int i,j;    
-    for(i=13;i<=20;i++){
+    for(i=12;i<=20;i++){
         for(j=2;j<12;j++){
             State s(j,(j-1)/10);
             reward_doubledown_Ace[i][j] = valueDoubleDown_ace(i,s);

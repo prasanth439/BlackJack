@@ -62,7 +62,7 @@ void BlackJackSolver::computeValue(){
                 temp_qh[i] = temm;
             }
             // temp_qh_aus
-            for(i=13;i<=21;i++)
+            for(i=12;i<=21;i++)
             {
                 // find the qh qs q
                 temm = 0;
@@ -136,7 +136,7 @@ void BlackJackSolver::computeValue(){
                 next_val[i] = max_;
             }
             // val aus
-            for(i=13;i<=20;i++)
+            for(i=12;i<=20;i++)
             {
                 max_ = reward_stand[i][dealer_card];
                 if(max_<reward_doubledown_Ace[i][dealer_card]){
@@ -158,10 +158,10 @@ void BlackJackSolver::computeValue(){
                     if(max_<temp_qh_aus[i]){
                         max_ = temp_qh_aus[i];
                     }
-                    if(max_<temp_qp[i]){
-                        max_ = temp_qp[i];
+                    if(max_<temp_qp[i+10]){
+                        max_ = temp_qp[i+10];
                     }
-                    next_val_pair[i] = max_;   
+                    next_val_pair[i+10] = max_;   
                     break;     
                 }
                 else{
@@ -188,7 +188,7 @@ void BlackJackSolver::computeValue(){
                 next_val_no_double[i] = max_;
             }
             // val aus no double
-            for(i=13;i<=21;i++){
+            for(i=12;i<=21;i++){
                 max_ = reward_stand[i][dealer_card];
                 if(max_<temp_qh_aus[i]){
                     max_ = temp_qh_aus[i];
@@ -226,10 +226,6 @@ void BlackJackSolver::computeValue(){
                 stand(answer_diff,i-5,dealer_card-2);
             else if(val[i]==reward_doubledown[i][dealer_card])
                 doubleDown(answer_diff,i-5,dealer_card-2);
-            if(i==11&&dealer_card==10){
-                cerr<<"Value["<<i<<"]["<<dealer_card<<"] Value | Qhit | Qstand | Qdoubledown"<<endl;
-                cerr<<val[i]<<"  "<<temp_qh[i]<<"  "<<reward_stand[i][dealer_card]<<"  "<<reward_doubledown[i][dealer_card]<<endl;
-            }
         }
         // ace cards
         for(i=13;i<=20;i++){
@@ -246,7 +242,7 @@ void BlackJackSolver::computeValue(){
             }
         }
         // pairs
-        for(i=4;i<=22;i=i+2)
+        for(i=4;i<=20;i=i+2)
         {
             if(val_pair[i]==temp_qh[i])
                 hit(answer_pair,(i/2)-2,dealer_card-2);
@@ -262,6 +258,20 @@ void BlackJackSolver::computeValue(){
                 cerr<<val_pair[i]<<"  "<<temp_qh[i]<<"  "<<reward_stand[i][dealer_card]<<"  "<<reward_doubledown[i][dealer_card]<<"  "<<temp_qp[i]<<endl;
             }   
         }
+        i = 22;
+            if(val_pair[i]==temp_qh_aus[i-10])
+                hit(answer_pair,(i/2)-2,dealer_card-2);
+            else if(val_pair[i]==reward_stand[i-10][dealer_card]){
+                stand(answer_pair,(i/2)-2,dealer_card-2);
+            }
+            else if(val_pair[i]==reward_doubledown[i-10][dealer_card])
+                doubleDown(answer_pair,(i/2)-2,dealer_card-2);       
+            else if(val_pair[i]==temp_qp[i])
+                pairVal(answer_pair,(i/2)-2,dealer_card-2);
+            // if(i==22){
+            //     cerr<<"ValuePair["<<i<<"]["<<dealer_card<<"] Value | Qhit | Qstand | Qdoubledown | QPair"<<endl;
+            //     cerr<<val_pair[i]<<"  "<<temp_qh_aus[i-10]<<"  "<<reward_stand[i-10][dealer_card]<<"  "<<reward_doubledown_Ace[i-10][dealer_card]<<"  "<<temp_qp[i]<<endl;
+            // } 
 
 
 
